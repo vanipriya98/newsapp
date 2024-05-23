@@ -1,0 +1,99 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.date-picker {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 15px 40px 0px 0px;
+}
+
+.news-box {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-articles {
+    margin-top: 25px;
+    padding: 10px;
+    font-size: 24px;
+}
+
+.news-article {
+    width: 300px;
+    padding: 5px;
+}
+
+img {
+    width: 100%;
+    height: 150px;
+}
+
+.mat-mdc-card-title {
+    font-size: 16px;
+    line-height: -1px;
+}
+
+.mat-mdc-card-header {
+    display: flex;
+    padding: 0px 5px;
+    font-size: 16px;
+}
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 1px;
+}
+
+.mdc-card__actions {
+    padding: 0px;
+}
+
+.mat-card {
+    height: 300px;
+}
+
+.mat-card-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.mat-card-content {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.article {
+    cursor: pointer;
+}
+
+.fa-solid .fa-bookmark {
+    background-color: rgb(49, 49, 95);
+}
+
+.fas .fa-regular .fa-solid {
+    font-size: 23px;
+}
+
+.bookmark {
+    position: absolute;
+    left: 230px
+}

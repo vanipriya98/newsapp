@@ -1,0 +1,39 @@
+<app-navbar [(searchTerm)]="searchTerm" [(selectedCategory)]="selectedCategory" (searchTermChange)="searchArticles()"
+  (selectedCategoryChange)="fetchNews($event)"></app-navbar>
+
+<div class="date-picker">
+  <mat-form-field appearance="fill">
+    <mat-label>Select Date Range</mat-label>
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate placeholder="Start date" [(ngModel)]="fromDate" (dateChange)="checkDates()">
+      <input matEndDate placeholder="End date" [(ngModel)]="toDate" (dateChange)="checkDates()">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+</div>
+
+<div class="news-box">
+  <div *ngIf="filteredArticles.length === 0 && searchTerm !== ''" class="no-articles">
+    No articles found with that keyword.Try with different keywords.
+  </div>
+  <div class="news-article" *ngFor="let article of filteredArticles">
+    <mat-card class="mat-card">
+      <div (click)="navigateToPage(article.url)" class="article">
+        <img mat-card-image [src]="article.urlToImage" alt="Article Image">
+        <mat-card-header>
+          <mat-card-title class="mat-card-title ellipsis">{{ article.title }}</mat-card-title>
+        </mat-card-header>
+      </div>
+      <mat-card-actions class="card-actions">
+        <button mat-icon-button (click)="shareArticle(article)" aria-label="Share">
+          <mat-icon>share</mat-icon>
+        </button>
+        <button mat-icon-button (click)="toggleBookmark(article)" aria-label="Bookmark" class="bookmark">
+          <mat-icon *ngIf="isBookmarked(article)">bookmark</mat-icon>
+          <mat-icon *ngIf="!isBookmarked(article)">bookmark_border</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

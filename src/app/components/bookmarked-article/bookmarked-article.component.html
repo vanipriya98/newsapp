@@ -1,0 +1,18 @@
+<app-navbar></app-navbar>
+<h1>Saved Articles</h1>
+<div class="news-box">
+    <div *ngIf="savedArticles.length === 0"  class="no-articles">
+        No saved articles.
+    </div>
+    <div *ngFor="let article of savedArticles" class="news-article">
+        <mat-card class="mat-card" >
+            <div (click)="navigateToPage(article.url)" class="article" >
+              <img mat-card-image [src]="article.urlToImage" alt="Article Image">
+            <mat-card-header>
+              <mat-card-title class="mat-card-title ellipsis">{{ article.title }}</mat-card-title>
+            </mat-card-header>
+            </div>
+        <button (click)="removeSavedArticle(article)" mat-raised-button color="primary">Remove</button>
+        </mat-card>
+    </div>
+</div>
