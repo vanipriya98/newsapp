@@ -8,7 +8,7 @@ import { Article } from '../models/news.model';
   providedIn: 'root',
 })
 export class NewsService {
-  private apiKey = 'b410f0d4c7a6486486bb1221ec0ea4ca';
+  private apiKey = 'e442d816c2284f19a4eea4c36bbb7e4f';
   private apiUrl = 'https://newsapi.org/v2/everything';
   private sortBy: string = 'publishedAt';
 
