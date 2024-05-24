@@ -1,4 +1,3 @@
-// src/app/models/article.model.ts
 export interface Article {
     source: {
       id: string | null;

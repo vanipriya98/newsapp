@@ -13,11 +13,14 @@
   </mat-form-field>
 </div>
 
-<div class="news-box">
+<div class="news-box" infiniteScroll
+[infiniteScrollDistance]="2"
+[infiniteScrollThrottle]="50"
+(scrolled)="onScroll()">
   <div *ngIf="filteredArticles.length === 0 && searchTerm !== ''" class="no-articles">
     No articles found with that keyword.Try with different keywords.
   </div>
-  <div class="news-article" *ngFor="let article of filteredArticles">
+  <div class="news-article" *ngFor="let article of filteredArticles" >
     <mat-card class="mat-card">
       <div (click)="navigateToPage(article.url)" class="article">
         <img mat-card-image [src]="article.urlToImage" alt="Article Image">
@@ -36,4 +39,5 @@
       </mat-card-actions>
     </mat-card>
   </div>
+
 </div>

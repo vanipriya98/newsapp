@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatInputModule,
     MatCardModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    InfiniteScrollModule
   ],
   providers: [NewsService],
   bootstrap: [AppComponent],

@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NewsService } from 'src/app/services/news.service';
 import { Article } from 'src/app/models/news.model';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { interval, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-homepage',
@@ -20,41 +17,22 @@ export class HomepageComponent implements OnInit, OnDestroy {
   toDate: Date | null = null;
   savedArticles: Article[] = [];
   maxDate: Date = new Date();
+  page: number = 1;
+  pageSize: number = 20;
+  totalPages: number = 1000;
   private refreshSubscription: Subscription | undefined;
 
-  constructor(
-    private newsService: NewsService,
-    private sanitizer: DomSanitizer
-  ) {}
+  constructor(private newsService: NewsService) {}
 
   ngOnInit(): void {
     this.loadSavedArticles();
 
     this.fetchNews('all');
 
-    // // Refresh news every 5 minutes
-    // this.refreshSubscription = interval(300000)
-    //   .pipe(
-    //     switchMap(() =>
-    //       this.newsService.getNews(
-    //         this.selectedCategory,
-    //         this.fromDate !== '' ? this.fromDate : undefined,
-    //         this.toDate !== '' ? this.toDate : undefined
-    //       )
-    //     )
-    //   )
-    //   .subscribe(
-    //     (response) => {
-    //       this.articles = response.articles.filter(article => article.source.name !== '[Removed]');
-    //       this.searchArticles();
-    //       console.log('News refreshed:', new Date());
-    //     },
-    //     (error) => {
-    //       console.error('Error fetching news:', error);
-    //     }
-    //   );
-
-    console.log('Homepage component initialized.');
+    this.refreshSubscription = interval(300000).subscribe(() => {
+      this.fetchNews(this.selectedCategory);
+      console.log('Page Refresh after 5 mins ');
+    });
   }
 
   ngOnDestroy(): void {
@@ -64,28 +42,44 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   fetchNews(category: string): void {
-    const fromDateStr = this.fromDate ? this.fromDate.toISOString().split('T')[0] : undefined;
-    const toDateStr = this.toDate ? this.toDate.toISOString().split('T')[0] : undefined;
-    const categoryToFetch = category !== "" ? category : "all";
+    const fromDateStr = this.fromDate
+      ? this.fromDate.toISOString().split('T')[0]
+      : undefined;
+    const toDateStr = this.toDate
+      ? this.toDate.toISOString().split('T')[0]
+      : undefined;
+    const categoryToFetch = category !== '' ? category : 'all';
 
     this.newsService
-        .getNews(categoryToFetch, fromDateStr, toDateStr)
-        .subscribe(
-            (response) => {
-              this.articles = response.articles
-              .filter(article => article.source.name !== '[Removed]')
-              .filter(article => article.urlToImage !== null);
-                this.searchArticles();
-                console.log('News fetched:', this.articles);
-            },
-            (error) => {
-                console.error('Error fetching news:', error);
-            }
-        );
-}
+      .getNews(
+        categoryToFetch,
+        this.pageSize,
+        this.page,
+        fromDateStr,
+        toDateStr
+      )
+      .subscribe(
+        (response) => {
+          if (this.page === 1) {
+            this.articles = [];
+          }
+          this.articles.push(
+            ...response.articles
+              .filter((article) => article.source.name !== '[Removed]')
+              .filter((article) => article.urlToImage !== null)
+          );
+          this.searchArticles();
+          this.totalPages = Math.ceil(response.totalResults / this.pageSize);
+        },
+        (error) => {
+          console.error('Error fetching news:', error);
+        }
+      );
+  }
 
   onCategoryChange(event: Event): void {
     this.selectedCategory = (event.target as HTMLSelectElement).value;
+    this.page = 1;
     this.fetchNews(this.selectedCategory);
   }
 
@@ -106,7 +100,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
               .includes(this.searchTerm.toLowerCase()))
       );
     }
-    console.log('Articles filtered:', this.filteredArticles);
   }
 
   shareArticle(article: Article): void {
@@ -181,21 +174,27 @@ export class HomepageComponent implements OnInit, OnDestroy {
     if (this.fromDate && this.toDate) {
       if (this.fromDate > this.maxDate) {
         this.fromDate = null;
-        alert('The start date cannot be in the future.');
-        return
+        alert(`The start date cannot be greater than Today's Date.`);
+        return;
       }
       if (this.toDate > this.maxDate) {
         this.toDate = null;
-        alert('The end date cannot be in the future.');
-        return
+        alert(`The end date cannot be greater than Today's Date.`);
+        return;
       }
+      this.page = 1;
       this.fetchNews(this.selectedCategory);
     }
-}
+  }
 
-navigateToPage(url:string){
-  window.open(url, '_blank');
-}
+  navigateToPage(url: string) {
+    window.open(url, '_blank');
+  }
 
- 
+  onScroll() {
+    if (this.page <= this.totalPages) {
+      this.page = this.page + 1;
+      this.fetchNews(this.selectedCategory);
+    }
+  }
 }

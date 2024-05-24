@@ -8,14 +8,14 @@ import { Article } from '../models/news.model';
   providedIn: 'root',
 })
 export class NewsService {
-  private apiKey = 'd8fbfd70505d41d2a91eea908a10ced2';
+  private apiKey = 'b410f0d4c7a6486486bb1221ec0ea4ca';
   private apiUrl = 'https://newsapi.org/v2/everything';
   private sortBy: string = 'publishedAt';
 
   constructor(private http: HttpClient) {}
 
-  getNews(category: string = 'all',from?: string,to?: string): Observable<{ status: string; totalResults: number; articles: Article[] }> {
-    let url = `${this.apiUrl}?q=${category}&apiKey=${this.apiKey}&sortBy=${this.sortBy}`;
+  getNews(category: string = 'all',pageSize:number,page:number,from?: string,to?: string,): Observable<{ status: string; totalResults: number; articles: Article[] }> {
+    let url = `${this.apiUrl}?q=${category}&apiKey=${this.apiKey}&sortBy=${this.sortBy}&page=${page}&pageSize=${pageSize}`;
     if (from ) {
       url += `&from=${from}`;
     }
