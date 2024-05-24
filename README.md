@@ -11,7 +11,7 @@ git clone https://github.com/vanipriya98/newsapp.git
 
 ## Note : If the maximum number of requests to the API per day is exceeded, it will lead to errors in the API response.
 
-## WebPage Screebshots
+## WebPage Screenshots
 
 Home Page 
 ![HomePage ScreenShots](src/assets/images/HomepageScreenshot1.png)
